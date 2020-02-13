@@ -46,7 +46,7 @@ app.post('/login', function (req, res) {
         clave: '222'
     }
     var configuraApi = {
-        url: "https://app-server-vehiculos.herokuapp.com/usuario/autentificar",
+        url: "https://app-server-vehiculos.herokuapp.com/autentificar",
         method: "POST",
         json: true,
         headers: {
@@ -55,7 +55,8 @@ app.post('/login', function (req, res) {
         body: credenciales
     }
     request(configuraApi, function (error, response, body) {
-                console.log(body.token);
+        
+        console.log(body);
     });
 
 
