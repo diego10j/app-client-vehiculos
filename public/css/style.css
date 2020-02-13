@@ -1,0 +1,96 @@
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+body {
+  line-height: 2;
+}
+
+.centrar-texto {
+  text-align: center;
+}
+.negrilla {
+  font-weight: bold;
+}
+
+
+
+footer {
+  margin-top: 50px;
+  width: 100%;
+  text-align: center;
+  background: #dddddd;
+  margin-bottom: 0;
+  color: white;
+}
+
+address {
+  margin-bottom: 0;
+}
+
+.icono-error {
+  color: #c50909;
+  text-shadow: 1px 1px 1px #ccc;
+  font-size: 8.5rem;
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
+
+.derecha {
+  float: right;
+  padding-bottom: 10px;
+}
+
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
+
+.icono-github {
+  color: #1f1e1e;
+  font-size: 1.8rem;
+}
+
+.icono {
+  color: #01356b;
+  text-shadow: 1px 1px 1px #ccc;
+  font-size: 5rem;
+  margin-left: 0.8rem;
+}

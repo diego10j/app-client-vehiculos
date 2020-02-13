@@ -1,0 +1,19 @@
+{
+  "name": "app-client-vehiculo",
+  "version": "1.0.0",
+  "description": "App Actividad 2 Ingeniería y Desarrollo en la Web",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "nodemon": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Diego Jacome",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "request": "^2.81.0",
+    "swig": "^1.4.2"
+  }
+}
