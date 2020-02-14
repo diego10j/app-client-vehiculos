@@ -1,0 +1,84 @@
+{% extends '../template.html' %}
+{% block content %}
+
+<div class="container">
+
+    <!-- HEADER -->
+    <header class="py-2 container fw-200">
+        <h1> <i class="fas fa-car-alt"></i> {{ titulo }}</h1>
+    </header> 
+    {% if vehiculo %} 
+        <form method="post" action="/modificarVehiculo/{{ vehiculo._id.toString()}}">
+        <div class="form-group">
+            <label for="marca">Marca: <span class="text-danger">*</span></label>
+            <input type="text" id="marca" name="marca" class="form-control" placeholder="Marca del vehículo"
+                value="{{ vehiculo.marca }}" required>
+        </div>
+        <div class="form-group">
+            <label for="modelo">Modelo: <span class="text-danger">*</span></label>
+            <input type="text" id="modelo" name="modelo" class="form-control" placeholder="Modelo del vehículo" required
+                value="{{ vehiculo.modelo }}">
+        </div>
+        <div class="form-group">
+            <label for="precio">Precio: <span class="text-danger">*</span></label>
+            <input type="number" id="precio" name="precio" class="form-control" placeholder="Precio del vehículo"
+                required value="{{ vehiculo.precio }}">
+        </div>
+        <div class="form-group">
+            <label for="urlImagen">Url Imágen: <span class="text-danger">*</span></label>
+            <input type="text" id="urlImagen" name="urlImagen" class="form-control"
+                placeholder="Url Imágen del Vehículo" required value="{{ vehiculo.urlImagen }}">
+        </div>
+        <div class="form-group">
+            <label for="color">Color: <span class="text-danger">*</span></label>
+            <input type="text" id="color" name="color" class="form-control" placeholder="Color del Vehículo" required
+                value="{{ vehiculo.color }}">
+        </div>
+        <div class="form-group">
+            <label for="anio">Año: <span class="text-danger">*</span></label>
+            <input type="number" id="anio" name="anio" class="form-control" required value="{{ vehiculo.anio }}">
+        </div>
+        <input type="submit" value="Modificar" class="btn btn-primary">
+    </form>
+    {% else %}
+    <form method="post" action="/guardarVehiculo">
+        <div class="form-group">
+            <label for="marca">Marca: <span class="text-danger">*</span></label>
+            <input type="text" id="marca" name="marca" class="form-control" placeholder="Marca del vehículo" required>
+        </div>
+        <div class="form-group">
+            <label for="modelo">Modelo: <span class="text-danger">*</span></label>
+            <input type="text" id="modelo" name="modelo" class="form-control" placeholder="Modelo del vehículo"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="precio">Precio: <span class="text-danger">*</span></label>
+            <input type="number" id="precio" name="precio" class="form-control" placeholder="Precio del vehículo"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="urlImagen">Url Imágen: <span class="text-danger">*</span></label>
+            <input type="text" id="urlImagen" name="urlImagen" class="form-control"
+                placeholder="Url Imágen del Vehículo" required>
+        </div>
+        <div class="form-group">
+            <label for="color">Color: <span class="text-danger">*</span></label>
+            <input type="text" id="color" name="color" class="form-control" placeholder="Color del Vehículo" required>
+        </div>
+        <div class="form-group">
+            <label for="anio">Año: <span class="text-danger">*</span></label>
+            <input type="number" id="anio" name="anio" class="form-control" required>
+        </div>
+        <input type="submit" value="Guardar" class="btn btn-primary">
+    </form>
+    {% endif %}
+
+
+    {% if mensaje %} 
+    <script>
+        alert("{{ mensaje }}");
+    </script>
+    {% endif %}   
+</div>
+
+{% endblock %}

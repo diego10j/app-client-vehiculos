@@ -1,0 +1,64 @@
+{% extends '../template.html' %}
+
+{% block content %}
+
+<!-- HEADER -->
+<header class="py-2 container fw-200">
+    <h1> <i class="fas fa-car-alt"></i> Vehiculos</h1>
+</header>
+
+
+<!-- ACTIONS -->
+<section class="py-2 mb-4 ">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 ml-auto">
+                <a href="/privado/vehiculo" class="btn btn-success btn-block">
+                    <i class="fas fa-plus"></i> Crear Vehículo
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LISTA VEHICULOS -->
+<section id="users">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Listado de Vehículos</h4>
+                    </div>
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>VEHICULO</th>
+                                <th></th>
+                                <th>PRECIO</th>
+                                <th>AÑO</th>
+                                <th style="width: 15%;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {% for vehiculo in vehiculos %}
+                                <tr>
+                                  <td> <img src="{{ vehiculo.urlImagen}}" height="96"> </td>
+                                  <td>{{ vehiculo.marca}} {{ vehiculo.modelo}}</td>
+                                  <td>{{ vehiculo.precio}}</td>
+                                  <td>{{ vehiculo.anio}}</td>
+                                  <td> <a href="/privado/vehiculo/{{ vehiculo._id.toString()}}" class="btn btn-primary" role="button"><i
+                                        class="far fa-edit"></i> </a> <a href="/eliminarVehiculo/{{ vehiculo._id.toString()}}" class="btn btn-danger"
+                                      role="button"><i class="fas fa-trash-alt"></i> </a> </td>
+                                </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
