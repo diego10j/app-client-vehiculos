@@ -11,7 +11,7 @@ Cliente que consume API rest.
 ## Instalación
 
 ```sh
-git clone https://github.com/diego10j/appnode
+git clone https://github.com/diego10j/app-client-vehiculos.git
 npm install
 npm start
 ```
