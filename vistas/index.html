@@ -3,7 +3,27 @@
 {% block content %}
 
 <div class="container">
-  
-  index
+  <!-- HEADER -->
+  <header class="py-2 container fw-200">
+    <h1> Vehículos Recientes</h1>
+  </header>
+  <p> Tenemos los mejores vehículos para tí y tu familia, a los mejores precios y de calidad única.</p>
+  <div class="py-2 row row-cols-1 row-cols-md-3">
+    {% for vehiculo in vehiculos %}
+    <div class="col mb-4">
+      <div class="card mb-4 ">
+        <img src="{{ vehiculo.urlImagen}}" height="200">
+        <div class="card-body">
+          <h5 class="card-title">{{ vehiculo.marca}} {{ vehiculo.modelo}}</h5>
+          <div class="card-text">AÑO : {{ vehiculo.anio}} </div>
+          <div class="card-text">COLOR : {{ vehiculo.color}} </div>
+        </div>
+        <div class="card-footer centrar-texto">
+          <p>${{ vehiculo.precio}}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

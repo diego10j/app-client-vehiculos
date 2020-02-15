@@ -18,12 +18,9 @@ app.use(expressSession({
 //Acceso a contenido carpeta public
 app.use(express.static('public'));
 
-
 // Router - zonaprivada
 var zonaprivada = express.Router();
-
 zonaprivada.use(function (req, res, next) {
-
     if (req.session.usuario) {
         // dejamos correr la petición
         next();
@@ -32,20 +29,39 @@ zonaprivada.use(function (req, res, next) {
         console.log("va a : " + req.session.destino)
         res.redirect("/login");
     }
-
 });
 
 // Aplicar zonaprivada a las siguientes URLs
 app.use("/privado/dashboard", zonaprivada);
 app.use("/privado/vehiculos", zonaprivada);
 app.use("/privado/vehiculo", zonaprivada);
+app.use("/privado/usuarios", zonaprivada);
 
 /**
  * Abre pagina index.html
  */
 app.get('/', function (req, res) {
-    var respuesta = swig.renderFile("vistas/index.html", {});
-    res.send(respuesta);
+    //consume servicio web rest 
+    var configuraApi = {
+        url: "https://app-server-vehiculos.herokuapp.com/vehiculo",
+        method: "GET",
+        json: true,
+        headers: {
+            "content-type": "application/json"
+        }
+    }
+    request(configuraApi, function (err, response, body) {
+        if (err) {
+            var respuesta = swig.renderFile('vistas/error.html', {
+                mensaje: "Ha ocurrido un error"
+            });
+            res.send(respuesta);
+        }
+        var respuesta = swig.renderFile('vistas/index.html', {
+            vehiculos: body.vehiculos
+        });
+        res.send(respuesta);
+    });
 });
 /**
  * Abre pagina registro.html
@@ -65,12 +81,89 @@ app.get('/login', function (req, res) {
  * Abre pagina dashboard.html
  */
 app.get('/privado/dashboard', function (req, res) {
-    var respuesta = swig.renderFile('vistas/privado/dashboard.html', {
-        usuario: req.session.usuario
+    //consume servicio web rest 
+    var configuraApi = {
+        url: "https://app-server-vehiculos.herokuapp.com/vehiculo",
+        method: "GET",
+        json: true,
+        headers: {
+            "content-type": "application/json",
+            "token": req.session.token, //Envia token de sessión
+        }
+    }
+    //Recupera el numero de vehiculos y de usuarios para enviarlos al dashboard
+    request(configuraApi, function (err, response, body) {
+        var totalVehiculos = Object.keys(body.vehiculos).length;
+        var configuraApi = {
+            url: "https://app-server-vehiculos.herokuapp.com/usuario",
+            method: "GET",
+            json: true,
+            headers: {
+                "content-type": "application/json",
+                "token": req.session.token, //Envia token de sessión
+            }
+        }
+        request(configuraApi, function (err, response, body) {
+            var totalUsuarios = Object.keys(body.usuarios).length;
+            var respuesta = swig.renderFile('vistas/privado/dashboard.html', {
+                usuario: req.session.usuario,
+                totalVehiculos: totalVehiculos,
+                totalUsuarios: totalUsuarios
+            });
+            res.send(respuesta);
+        });
     });
-    res.send(respuesta);
+});
+/**
+ * Valida login 
+ */
+app.post('/login', function (req, res) {
+    //Recupera valores del formulario
+    var credenciales = {
+        correo: req.body.correo,
+        clave: req.body.clave
+    }
+    //consume servicio web rest 
+    var configuraApi = {
+        url: "https://app-server-vehiculos.herokuapp.com/autentificar",
+        method: "POST",
+        json: true,
+        headers: {
+            "content-type": "application/json",
+        },
+        body: credenciales
+    }
+    request(configuraApi, function (err, response, body) {
+        if (err) {
+            var respuesta = swig.renderFile('vistas/error.html', {
+                mensaje: "Ha ocurrido un error"
+            });
+            res.send(respuesta);
+        }
+        if (body.error) {
+            var respuesta = swig.renderFile('vistas/login.html', {
+                mensaje: body.mensaje
+            });
+            res.send(respuesta);
+        }
+        else {
+            // Encontrado
+            req.session.usuario = body.usuario;
+            req.session.token = body.token; //Guarda token 
+            res.redirect("/privado/dashboard");
+        }
+    });
+});
+/**
+ * Cerrar session
+ */
+app.get('/logout', function (req, res) {
+    req.session.usuario = null;
+    req.session.token = null;
+    res.redirect("/");
 });
 
+/**========USUARIOS==========*/
 /**
  * Guarda un usuario 
  */
@@ -109,12 +202,61 @@ app.post('/guardarUsuario', function (req, res) {
         }
     });
 });
+/**
+ * Consulta todos los usuarios
+ */
+app.get('/privado/usuarios', function (req, res) {
+    //consume servicio web rest 
+    var configuraApi = {
+        url: "https://app-server-vehiculos.herokuapp.com/usuario",
+        method: "GET",
+        json: true,
+        headers: {
+            "content-type": "application/json",
+            "token": req.session.token, //Envia token de sessión
+        }
+    }
+    request(configuraApi, function (err, response, body) {
+        if (err) {
+            var respuesta = swig.renderFile('vistas/error.html', {
+                mensaje: "Ha ocurrido un error"
+            });
+            res.send(respuesta);
+        }
+        var respuesta = swig.renderFile('vistas/privado/usuarios.html', {
+            usuario: req.session.usuario,
+            usuarios: body.usuarios
+        });
+        res.send(respuesta);
+    });
+});
+/**
+ * Eliminar un usuario 
+ */
+app.get('/eliminarUsuario/:id', function (req, res) {
+    var idVehiculo = req.params.id;
+    //consume servicio web rest 
+    var configuraApi = {
+        url: "https://app-server-vehiculos.herokuapp.com/usuario/" + idVehiculo,
+        method: "DELETE",
+        json: true,
+        headers: {
+            "content-type": "application/json",
+            "token": req.session.token, //Envia token de sessión
+        }
+    }
+    request(configuraApi, function (err, response, body) {
+        if (err) {
+            var respuesta = swig.renderFile('vistas/error.html', {
+                mensaje: "Ha ocurrido un error"
+            });
+            res.send(respuesta);
+        }
+        res.redirect("/privado/usuarios");
+    });
+});
 
-
-
-/**-------------
-*/
-
+/**========VEHICULOS==========*/
 /**
  * Abre pagina de datos del vehiculo.html
  */
@@ -125,7 +267,6 @@ app.get('/privado/vehiculo', function (req, res) {
     });
     res.send(respuesta);
 });
-
 /**
  * Abre pagina de datos del vehiculo.html
  */
@@ -159,8 +300,9 @@ app.get('/privado/vehiculo/:id', function (req, res) {
     });
 
 });
-
-
+/**
+ * Consulta todos los vehiculos
+ */
 app.get('/privado/vehiculos', function (req, res) {
     //consume servicio web rest 
     var configuraApi = {
@@ -187,7 +329,6 @@ app.get('/privado/vehiculos', function (req, res) {
         res.send(respuesta);
     });
 });
-
 /**
  * Guarda un vehiculo 
  */
@@ -227,9 +368,6 @@ app.post('/guardarVehiculo', function (req, res) {
         res.send(respuesta);
     });
 });
-
-
-
 /**
  * Guarda un vehiculo 
  */
@@ -246,7 +384,7 @@ app.post('/modificarVehiculo/:id', function (req, res) {
     }
     //consume servicio web rest 
     var configuraApi = {
-        url: "https://app-server-vehiculos.herokuapp.com/vehiculo/"+idVehiculo,
+        url: "https://app-server-vehiculos.herokuapp.com/vehiculo/" + idVehiculo,
         method: "PUT",
         json: true,
         headers: {
@@ -262,31 +400,23 @@ app.post('/modificarVehiculo/:id', function (req, res) {
             });
             res.send(respuesta);
         }
-        var respuesta = swig.renderFile('vistas/privado/vehiculo.html', {
-            titulo: "Modificar Vehículo",
-            mensaje: body.mensaje,
-            usuario: req.session.usuario,
-            vehiculo: vehiculo
-        });
-        res.send(respuesta);
+        res.redirect("/privado/vehiculos");
     });
 });
-
-app.post('/login', function (req, res) {
-    //Recupera valores del formulario
-    var credenciales = {
-        correo: req.body.correo,
-        clave: req.body.clave
-    }
+/**
+ * Eliminar un vehiculo 
+ */
+app.get('/eliminarVehiculo/:id', function (req, res) {
+    var idVehiculo = req.params.id;
     //consume servicio web rest 
     var configuraApi = {
-        url: "https://app-server-vehiculos.herokuapp.com/autentificar",
-        method: "POST",
+        url: "https://app-server-vehiculos.herokuapp.com/vehiculo/" + idVehiculo,
+        method: "DELETE",
         json: true,
         headers: {
             "content-type": "application/json",
-        },
-        body: credenciales
+            "token": req.session.token, //Envia token de sessión
+        }
     }
     request(configuraApi, function (err, response, body) {
         if (err) {
@@ -295,27 +425,9 @@ app.post('/login', function (req, res) {
             });
             res.send(respuesta);
         }
-        if (body.error) {
-            var respuesta = swig.renderFile('vistas/login.html', {
-                mensaje: body.mensaje
-            });
-            res.send(respuesta);
-        }
-        else {
-            // Encontrado
-            req.session.usuario = body.usuario;
-            req.session.token = body.token;
-            res.redirect("/privado/dashboard");
-        }
+        res.redirect("/privado/vehiculos");
     });
 });
-
-
-app.get('/logout', function (req, res) {
-    req.session.usuario = null;
-    req.session.token = null;
-    res.redirect("/");
-})
 
 
 app.listen(port, function () {

@@ -5,7 +5,7 @@
 
     <!-- HEADER -->
     <header class="py-2 container fw-200">
-        <h1> <i class="fas fa-car-alt"></i> {{ titulo }}</h1>
+        <h1> <i class="fas fa-car"></i> {{ titulo }}</h1>
     </header> 
     {% if vehiculo %} 
         <form method="post" action="/modificarVehiculo/{{ vehiculo._id.toString()}}">

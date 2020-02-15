@@ -4,7 +4,7 @@
 
 <!-- HEADER -->
 <header class="py-2 container fw-200">
-    <h1> <i class="fas fa-car-alt"></i> Vehiculos</h1>
+    <h1> <i class="fas fa-car"></i> Vehiculos</h1>
 </header>
 
 
@@ -41,17 +41,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                                {% for vehiculo in vehiculos %}
-                                <tr>
-                                  <td> <img src="{{ vehiculo.urlImagen}}" height="96"> </td>
-                                  <td>{{ vehiculo.marca}} {{ vehiculo.modelo}}</td>
-                                  <td>{{ vehiculo.precio}}</td>
-                                  <td>{{ vehiculo.anio}}</td>
-                                  <td> <a href="/privado/vehiculo/{{ vehiculo._id.toString()}}" class="btn btn-primary" role="button"><i
-                                        class="far fa-edit"></i> </a> <a href="/eliminarVehiculo/{{ vehiculo._id.toString()}}" class="btn btn-danger"
-                                      role="button"><i class="fas fa-trash-alt"></i> </a> </td>
-                                </tr>
-                                {% endfor %}
+                            {% for vehiculo in vehiculos %}
+                            <tr>
+                                <td> <img src="{{ vehiculo.urlImagen}}" height="96"> </td>
+                                <td>{{ vehiculo.marca}} {{ vehiculo.modelo}}</td>
+                                <td>{{ vehiculo.precio}}</td>
+                                <td>{{ vehiculo.anio}}</td>
+                                <td> <a href="/privado/vehiculo/{{ vehiculo._id.toString()}}" class="btn btn-primary"
+                                        role="button"><i class="far fa-edit"></i> </a> <a
+                                        href="/eliminarVehiculo/{{ vehiculo._id.toString()}}" class="btn btn-danger"
+                                        role="button"><i class="fas fa-trash-alt"></i> </a> </td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -59,6 +60,5 @@
         </div>
     </div>
 </section>
-
 
 {% endblock %}
