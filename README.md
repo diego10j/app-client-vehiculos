@@ -20,3 +20,8 @@ Abrir en el navegador [http://localhost:3000/](http://localhost:3000/)
 ## Demo
 
 Visitar el sitio [https://app-client-vehiculos.herokuapp.com/](https://app-client-vehiculos.herokuapp.com/)
+
+
+## Credenciales
+Usuario : diego10j.89@hotmail.com
+Contraseña: 1234
